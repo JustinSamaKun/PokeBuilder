@@ -9,6 +9,7 @@ public enum ModifierType {
     GENDER(1500),
     GROWTH(500),
     HIDDEN_ABILITY(10000),
+    IVS(1),
     INCREASE_IV(150),
     INCREASE_IV_10(1000),
     DECREASE_IV(150),

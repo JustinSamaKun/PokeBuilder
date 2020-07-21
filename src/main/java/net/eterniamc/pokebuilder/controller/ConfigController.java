@@ -54,9 +54,12 @@ public enum ConfigController {
         } else {
             CONFIG = new Config();
             for (ModifierType type : ModifierType.values()) {
-                CONFIG.getModifierPrices().put(type, type.getDefaultPrice());
-                CONFIG.getModifierPriceOverrides().put(type, Maps.newHashMap());
+                if (type != ModifierType.IVS) {
+                    CONFIG.getModifierPrices().put(type, type.getDefaultPrice());
+                    CONFIG.getModifierPriceOverrides().put(type, Maps.newHashMap());
+                }
             }
+            CONFIG.getBlacklistedModifiers().add(ModifierType.IVS);
             CONFIG.getModifierPriceOverrides().get(ModifierType.MAX_IV).put(EnumSpecies.Ditto.toString(), 10000.0);
             CONFIG.getModifierPriceOverrides().get(ModifierType.SHINY).put(PokemonType.LEGENDARY.toString(), 500000.0);
             for (PokemonType pokemonType : PokemonType.values()) {

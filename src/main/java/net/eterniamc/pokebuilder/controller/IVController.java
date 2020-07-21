@@ -12,7 +12,7 @@ public enum IVController implements ModifierController {
 
     @Override
     public ModifierType getType() {
-        return ModifierType.MAX_IV;
+        return ModifierType.IVS;
     }
 
     @Override
