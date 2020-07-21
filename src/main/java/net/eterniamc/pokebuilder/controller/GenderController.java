@@ -19,7 +19,7 @@ public enum GenderController implements ModifierController {
 
     @Override
     public boolean canApply(Pokemon pokemon) {
-        return Math.abs(pokemon.getBaseStats().malePercent - 0.5) < 0.5;
+        return Math.abs(pokemon.getBaseStats().malePercent - 50) < 50;
     }
 
     @Override
