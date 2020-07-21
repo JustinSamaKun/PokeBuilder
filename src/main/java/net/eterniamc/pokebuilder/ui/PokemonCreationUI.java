@@ -42,11 +42,17 @@ public class PokemonCreationUI extends DynamicUI {
                             ConfigController.CONFIG.getMessagePrefix() +
                             String.format(ConfigController.CONFIG.getPokemonNotFoundMessage(), message)
                     )));
+                } else if (ConfigController.INSTANCE.isBlacklisted(species)) {
+                    player1.sendMessage(new TextComponentString(TextUtils.text(
+                            ConfigController.CONFIG.getMessagePrefix() +
+                            String.format(ConfigController.CONFIG.getPokemonIsBlacklistedMessage(), message)
+                    )));
+                } else {
+                    CurrencyUtils.wrapAction(player1, ConfigController.INSTANCE.getPokemonCreationPrice(species), () -> {
+                        PlayerPartyStorage party = Pixelmon.storageManager.getParty(player1);
+                        party.add(Pixelmon.pokemonFactory.create(species));
+                    });
                 }
-                CurrencyUtils.wrapAction(player1, ConfigController.INSTANCE.getPokemonCreationPrice(species), () -> {
-                    PlayerPartyStorage party = Pixelmon.storageManager.getParty(player1);
-                    party.add(Pixelmon.pokemonFactory.create(species));
-                });
             });
         });
         addListener(LEGENDARY_SLOT, (player1, event) -> new PokemonSelectForCreationUI(PokemonType.LEGENDARY).open(player));

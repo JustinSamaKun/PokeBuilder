@@ -2,6 +2,7 @@ package net.eterniamc.pokebuilder.data;
 
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import lombok.Getter;
+import net.eterniamc.pokebuilder.controller.ConfigController;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +21,10 @@ public enum PokemonType {
     PokemonType(double defaultPrice, Predicate<EnumSpecies> filter) {
         this.defaultPrice = defaultPrice;
         this.filter = filter;
-        this.species = Arrays.stream(EnumSpecies.values()).filter(filter).collect(Collectors.toList());
+        this.species = Arrays.stream(EnumSpecies.values())
+                .filter(filter)
+                .filter(species1 -> !ConfigController.INSTANCE.isBlacklisted(species1))
+                .collect(Collectors.toList());
     }
 
     public static PokemonType of(EnumSpecies species) {
