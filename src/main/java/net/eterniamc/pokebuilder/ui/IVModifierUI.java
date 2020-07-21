@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.comm.EnumUpdateType;
 import com.pixelmonmod.pixelmon.config.PixelmonItems;
 import com.pixelmonmod.pixelmon.config.PixelmonItemsValuables;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.IVStore;
+import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import lombok.RequiredArgsConstructor;
 import net.eterniamc.dynamicui.DynamicUI;
 import net.eterniamc.pokebuilder.controller.ConfigController;
@@ -27,7 +28,6 @@ import static com.pixelmonmod.pixelmon.config.PixelmonItemsHeld.*;
 public class IVModifierUI extends DynamicUI {
     private static final int[] LAYOUT = { 1, 10, 19, 28, 37, 46 };
     private static final Item[] DISPLAY = { powerWeight, powerBracer, powerBelt, powerLens, powerBand, powerAnklet };
-    private static final String[] NAME = { "HP", "Attack", "Defence", "Special Attack", "Special Defence", "Speed" };
     private static final int MAX_IVS = 41;
     private static final int RANDOM_IVS = 43;
 
@@ -111,7 +111,7 @@ public class IVModifierUI extends DynamicUI {
             int value = ivs[i];
 
             ItemStack display = new ItemStack(DISPLAY[i]);
-            ItemUtils.setDisplayName(display, NAME[i]);
+            ItemUtils.setDisplayName(display, StatsType.getStatValues()[i].getLocalizedName());
             display.setCount(value);
             setItem(slot, display);
 
