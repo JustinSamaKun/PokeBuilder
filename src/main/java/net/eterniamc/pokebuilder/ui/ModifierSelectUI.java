@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import net.eterniamc.dynamicui.DynamicUI;
 import net.eterniamc.pokebuilder.ui.component.PokeballComponent;
 import net.eterniamc.pokebuilder.controller.*;
+import net.eterniamc.pokebuilder.util.ChatUtils;
 import net.eterniamc.pokebuilder.util.ItemUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -43,14 +44,20 @@ public class ModifierSelectUI extends DynamicUI {
         for (Integer slot : MODIFIERS.keySet()) {
             ModifierController controller = MODIFIERS.get(slot);
 
-            if (controller.canApply(pokemon)) {
-                addListener(slot, (player, action) -> {
+            addListener(slot, (player, action) -> {
+                if (ConfigController.INSTANCE.isBlacklisted(controller.getType())) {
+                    ChatUtils.sendMessage(player, "This modifier is blacklisted");
+                } else if (ConfigController.INSTANCE.getPriceFor(controller.getType(), pokemon) <= 0) {
+                    ChatUtils.sendMessage(player, "This modifier can not be used on this Pokemon");
+                } else if (controller.canApply(pokemon)) {
+                    ChatUtils.sendMessage(player, "This Pokemon is not compatible with this modifier");
+                } else {
                     controller.process(pokemon);
                     if (isValid()) {
                         render();
                     }
-                });
-            }
+                }
+            });
         }
     }
 
@@ -68,6 +75,8 @@ public class ModifierSelectUI extends DynamicUI {
             ItemStack display = controller.getDisplay(pokemon);
             if (ConfigController.INSTANCE.isBlacklisted(controller.getType())) {
                 ItemUtils.setItemLore(display, "&cThis modifier is blacklisted");
+            } else if (ConfigController.INSTANCE.getPriceFor(controller.getType(), pokemon) <= 0) {
+                ItemUtils.setItemLore(display, "&cThis modifier can not be used for this Pokemon");
             }
             setItem(slot, display);
         }
