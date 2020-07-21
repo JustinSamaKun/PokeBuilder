@@ -59,7 +59,8 @@ public enum ConfigController {
             return CONFIG.getModifierPriceOverrides().get(type).get(pokemon.getSpecies());
         }
 
-        return CONFIG.getModifierPrices().getOrDefault(type, type.getDefaultPrice());
+        double multiplier = pokemon.isLegendary() ? CONFIG.getLegendaryPriceMultiplier() : 1;
+        return CONFIG.getModifierPrices().getOrDefault(type, type.getDefaultPrice()) * multiplier;
     }
 
     public boolean isBlacklisted(ModifierType type) {

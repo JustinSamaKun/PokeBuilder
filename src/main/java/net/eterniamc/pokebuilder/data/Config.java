@@ -23,6 +23,7 @@ public class Config {
     private Set<ModifierType> blacklistedModifiers = Sets.newHashSet();
     private Set<EnumSpecies> blacklistedPokemon = Sets.newHashSet();
 
+    private double legendaryPriceMultiplier = 1.5;
     private Map<ModifierType, Double> modifierPrices = Maps.newEnumMap(ModifierType.class);
     private Map<ModifierType, Map<EnumSpecies, Double>> modifierPriceOverrides = Maps.newEnumMap(ModifierType.class);
 
