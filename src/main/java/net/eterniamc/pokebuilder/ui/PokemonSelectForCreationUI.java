@@ -40,10 +40,10 @@ public class PokemonSelectForCreationUI extends DynamicUI {
                 .subList(currentPage * 28, Math.min(currentPage * 28 + 28, type.getSpecies().size()))
                 .iterator();
 
-        for (int row = 0; row < 9; row++) {
-            for (int column = 0; column < 6 && iterator.hasNext(); column++) {
+        for (int row = 1; row < 8; row++) {
+            for (int column = 1; column < 5; column++) {
                 int slot = row * 9 + column;
-                if (0 < row && row < 8 && 0 < column && column < 5) {
+                if (iterator.hasNext()) {
                     EnumSpecies species = iterator.next();
 
                     addListener(slot, (player1, event) -> {
