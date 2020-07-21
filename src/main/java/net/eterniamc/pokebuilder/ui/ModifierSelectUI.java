@@ -50,7 +50,7 @@ public class ModifierSelectUI extends DynamicUI {
                     ChatUtils.sendMessage(player, "message.modifier-is-blacklisted");
                 } else if (ConfigController.INSTANCE.getPriceFor(controller.getType(), pokemon) <= 0) {
                     ChatUtils.sendMessage(player, "message.modifier-is-disabled");
-                } else if (controller.canApply(pokemon)) {
+                } else if (!controller.canApply(pokemon)) {
                     ChatUtils.sendMessage(player, "message.modifier-not-compatible");
                 } else {
                     controller.process(pokemon);
