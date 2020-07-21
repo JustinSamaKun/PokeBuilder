@@ -37,7 +37,7 @@ public class CurrencyUtils {
         Bridge.INSTANCE.API.getCurrencyController().removePlayerBalance(ConfigController.CONFIG.getCurrency(), player, amount);
         player.sendMessage(new TextComponentString(TextUtils.text(
                 ConfigController.CONFIG.getMessagePrefix() +
-                    String.format(ConfigController.CONFIG.getPaidMessage(), new DecimalFormat("#.##").format(amount))
+                    String.format(ConfigController.CONFIG.getPaidMessage(), new DecimalFormat("#,###,###,###.##").format(amount))
         )));
     }
 }
