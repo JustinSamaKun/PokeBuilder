@@ -84,7 +84,7 @@ dependencies {
     shade 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
-    compile fileTree('./libs')
+    compile files('../Pixelmon-8.jar')
 }
 
 jar {

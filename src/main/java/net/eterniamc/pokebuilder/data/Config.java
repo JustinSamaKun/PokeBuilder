@@ -17,6 +17,8 @@ public class Config {
     private String notEnoughMoneyMessage = "You do not have enough money to do this!";
     private String paidMessage = "$%s has been withdrawn from your account";
     private String costMessage = "&7Cost: &a$%s";
+    private String createPokemonMessage = "Send the name of the Pokemon you want in chat";
+    private String pokemonNotFoundMessage = "Could not create the Pokemon with name %s";
 
     private String currency = "Coin";
 

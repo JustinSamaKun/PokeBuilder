@@ -15,6 +15,7 @@ import net.eterniamc.pokebuilder.data.gson.ModifierTypeAdapter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.DecimalFormat;
 
 public enum ConfigController {
     INSTANCE;
@@ -54,6 +55,10 @@ public enum ConfigController {
         writer.close();
     }
 
+    public String createPriceLine(double price) {
+        return String.format(CONFIG.getCostMessage(), new DecimalFormat("#,###,###.##").format(price));
+    }
+
     public double getPriceFor(ModifierType type, Pokemon pokemon) {
         if (CONFIG.getModifierPriceOverrides().getOrDefault(type, Maps.newHashMap()).containsKey(pokemon.getSpecies())) {
             return CONFIG.getModifierPriceOverrides().get(type).get(pokemon.getSpecies());
@@ -71,7 +76,11 @@ public enum ConfigController {
         return CONFIG.getBlacklistedPokemon().contains(type);
     }
 
-    public double getPriceToCreate(EnumSpecies species) {
-        return CONFIG.getPokemonCreationPriceOverrides().getOrDefault(species, CONFIG.getPokemonCreationPrices().get(PokemonType.of(species)));
+    public double getPokemonCreationPrice(PokemonType type) {
+        return CONFIG.getPokemonCreationPrices().getOrDefault(type, type.getDefaultPrice());
+    }
+
+    public double getPokemonCreationPrice(EnumSpecies species) {
+        return CONFIG.getPokemonCreationPriceOverrides().getOrDefault(species, getPokemonCreationPrice(PokemonType.of(species)));
     }
 }

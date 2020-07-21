@@ -13,15 +13,18 @@ public class UserInterfaceUtils {
     }
 
     public static void createConfirmation(Pokemon pokemon, double price, Runnable onAccept) {
-        EntityPlayerMP owner = pokemon.getOwnerPlayer();
-        if (CurrencyUtils.playerHasMoney(owner, price)) {
+        createConfirmation(pokemon.getOwnerPlayer(), pokemon, price, onAccept);
+    }
+
+    public static void createConfirmation(EntityPlayerMP player, Pokemon pokemon, double price, Runnable onAccept) {
+        if (CurrencyUtils.playerHasMoney(player, price)) {
             new ChoiceConfirmationUI(
                     () -> {
-                        CurrencyUtils.removePlayerMoney(owner, price);
+                        CurrencyUtils.removePlayerMoney(player, price);
                         onAccept.run();
                     },
                     pokemon
-            ).open(owner);
+            ).open(player);
         }
     }
 }
