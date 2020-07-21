@@ -8,6 +8,7 @@ import net.eterniamc.dynamicui.DynamicUI;
 import net.eterniamc.pokebuilder.controller.ConfigController;
 import net.eterniamc.pokebuilder.ui.component.PokemonComponent;
 import net.eterniamc.pokebuilder.util.ItemUtils;
+import net.eterniamc.pokebuilder.util.LangUtils;
 import net.eterniamc.pokebuilder.util.TextUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -25,7 +26,7 @@ public class PokemonSelectUI extends DynamicUI {
 
     @Override
     public void generateInventory() {
-        inventory = createInventory("Select the Pokemon to modify", 4);
+        inventory = createInventory(LangUtils.get("party.ui.name"), 4);
     }
 
     @Override
@@ -65,13 +66,13 @@ public class PokemonSelectUI extends DynamicUI {
                 new PokemonComponent(slot, pokemon).render(inventory);
                 ItemStack stack = inventory.getStackInSlot(slot);
                 if (ConfigController.INSTANCE.isBlacklisted(pokemon.getSpecies())) {
-                    ItemUtils.setDisplayName(stack, "&c" + pokemon.getDisplayName() + " can not be modified");
+                    ItemUtils.setDisplayName(stack, LangUtils.format("party.ui.blacklisted", pokemon.getDisplayName()));
                 } else {
-                    ItemUtils.setDisplayName(stack, "&eClick To Edit");
+                    ItemUtils.setDisplayName(stack, "party.ui.edit");
                 }
             } else if (ConfigController.CONFIG.isPokemonCreationAllowed()) {
                 ItemStack stack = new ItemStack(PixelmonItemsPokeballs.pokeBall);
-                ItemUtils.setDisplayName(stack, "&eCreate A Pokemon");
+                ItemUtils.setDisplayName(stack, "party.ui.create");
                 setItem(slot, stack);
             } else {
                 setItem(slot, ItemStack.EMPTY);

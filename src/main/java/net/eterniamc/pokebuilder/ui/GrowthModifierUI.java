@@ -8,6 +8,7 @@ import net.eterniamc.pokebuilder.controller.GrowthController;
 import net.eterniamc.pokebuilder.data.ModifierType;
 import net.eterniamc.pokebuilder.ui.component.PokeballComponent;
 import net.eterniamc.pokebuilder.util.ItemUtils;
+import net.eterniamc.pokebuilder.util.LangUtils;
 import net.eterniamc.pokebuilder.util.TextUtils;
 import net.eterniamc.pokebuilder.util.UserInterfaceUtils;
 import net.minecraft.init.Blocks;
@@ -29,7 +30,7 @@ public class GrowthModifierUI extends DynamicUI {
 
     @Override
     public void generateInventory() {
-        inventory = createInventory("Choose A Growth", 5);
+        inventory = createInventory(LangUtils.get("modifier.growth.ui.name"), 5);
     }
 
     @Override

@@ -23,7 +23,7 @@ public enum IVController implements ModifierController {
     @Override
     public ItemStack getDisplay(Pokemon pokemon) {
         ItemStack stack = new ItemStack(PixelmonItems.energyRoot);
-        ItemUtils.setDisplayName(stack, "&6IV Modifier");
+        ItemUtils.setDisplayName(stack, "modifier.iv.name");
         return stack;
     }
 }

@@ -7,6 +7,7 @@ import net.eterniamc.pokebuilder.ui.component.PokeballComponent;
 import net.eterniamc.pokebuilder.controller.*;
 import net.eterniamc.pokebuilder.util.ChatUtils;
 import net.eterniamc.pokebuilder.util.ItemUtils;
+import net.eterniamc.pokebuilder.util.LangUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -34,7 +35,7 @@ public class ModifierSelectUI extends DynamicUI {
 
     @Override
     public void generateInventory() {
-        inventory = createInventory("Choose A Modifier", 5);
+        inventory = createInventory(LangUtils.get("modifier.ui.name"), 5);
     }
 
     @Override
@@ -46,11 +47,11 @@ public class ModifierSelectUI extends DynamicUI {
 
             addListener(slot, (player, action) -> {
                 if (ConfigController.INSTANCE.isBlacklisted(controller.getType())) {
-                    ChatUtils.sendMessage(player, "This modifier is blacklisted");
+                    ChatUtils.sendMessage(player, "message.modifier-is-blacklisted");
                 } else if (ConfigController.INSTANCE.getPriceFor(controller.getType(), pokemon) <= 0) {
-                    ChatUtils.sendMessage(player, "This modifier can not be used on this Pokemon");
+                    ChatUtils.sendMessage(player, "message.modifier-is-disabled");
                 } else if (controller.canApply(pokemon)) {
-                    ChatUtils.sendMessage(player, "This Pokemon is not compatible with this modifier");
+                    ChatUtils.sendMessage(player, "message.modifier-not-compatible");
                 } else {
                     controller.process(pokemon);
                     if (isValid()) {
@@ -74,9 +75,9 @@ public class ModifierSelectUI extends DynamicUI {
 
             ItemStack display = controller.getDisplay(pokemon);
             if (ConfigController.INSTANCE.isBlacklisted(controller.getType())) {
-                ItemUtils.setItemLore(display, "&cThis modifier is blacklisted");
+                ItemUtils.setItemLore(display, "modifier.blacklisted");
             } else if (ConfigController.INSTANCE.getPriceFor(controller.getType(), pokemon) <= 0) {
-                ItemUtils.setItemLore(display, "&cThis modifier can not be used for this Pokemon");
+                ItemUtils.setItemLore(display, "modifier.disabled");
             }
             setItem(slot, display);
         }

@@ -11,6 +11,7 @@ import net.eterniamc.dynamicui.DynamicUI;
 import net.eterniamc.pokebuilder.data.ModifierType;
 import net.eterniamc.pokebuilder.ui.component.PokemonComponent;
 import net.eterniamc.pokebuilder.util.ItemUtils;
+import net.eterniamc.pokebuilder.util.LangUtils;
 import net.eterniamc.pokebuilder.util.UserInterfaceUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
@@ -32,7 +33,7 @@ public class NatureModifierUI extends DynamicUI {
 
     @Override
     public void generateInventory() {
-        inventory = createInventory("Nature Modifier", 6);
+        inventory = createInventory(LangUtils.get("modifier.nature.ui.name"), 6);
 
         StatsType[] types = { StatsType.Attack, StatsType.Defence, StatsType.SpecialAttack, StatsType.SpecialDefence, StatsType.Speed };
         Set<EnumNature> used = Sets.newHashSet();
@@ -83,11 +84,11 @@ public class NatureModifierUI extends DynamicUI {
 
         for (int i = 0; i < types.length; i++) {
             ItemStack stack = new ItemStack(items[i]);
-            ItemUtils.setDisplayName(stack, "&cLowering " + types[i].getLocalizedName());
+            ItemUtils.setDisplayName(stack, LangUtils.format("modifier.nature.lowering", types[i].getLocalizedName()));
             setItem(i + 2, stack);
 
             stack = new ItemStack(items[i]);
-            ItemUtils.setDisplayName(stack, "&aRaising " + types[i].getLocalizedName());
+            ItemUtils.setDisplayName(stack, LangUtils.format("modifier.nature.raising", types[i].getLocalizedName()));
             setItem((i + 1) * 9 + 1, stack);
         }
 
@@ -97,10 +98,14 @@ public class NatureModifierUI extends DynamicUI {
             StatsType lowered = nature.decreasedStat;
 
             ItemStack item = new ItemStack(getItemForRaisedStat(raised));
-            ItemUtils.setItemLore(item, "&a+ " + raised.getLocalizedName(), "&c- " + lowered.getLocalizedName());
+            ItemUtils.setItemLore(
+                    item,
+                    LangUtils.format("modifier.nature.increase", raised.getLocalizedName()),
+                    LangUtils.format("modifier.nature.decrease", lowered.getLocalizedName())
+                    );
             if (raised == lowered) {
                 item = new ItemStack(PixelmonItemsBadges.balanceBadge);
-                ItemUtils.setItemLore(item, "&7Neutral");
+                ItemUtils.setItemLore(item, "modifier.nature.neutral");
             }
             if (pokemon.getNature().equals(nature)) {
                 item.addEnchantment(Enchantments.UNBREAKING, 1);

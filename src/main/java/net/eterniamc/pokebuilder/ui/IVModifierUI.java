@@ -13,6 +13,7 @@ import net.eterniamc.pokebuilder.data.ModifierType;
 import net.eterniamc.pokebuilder.ui.component.PokeballComponent;
 import net.eterniamc.pokebuilder.util.CurrencyUtils;
 import net.eterniamc.pokebuilder.util.ItemUtils;
+import net.eterniamc.pokebuilder.util.LangUtils;
 import net.eterniamc.pokebuilder.util.UserInterfaceUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ClickType;
@@ -41,7 +42,7 @@ public class IVModifierUI extends DynamicUI {
 
     @Override
     public void generateInventory() {
-        inventory = createInventory("Modify IVs", 6);
+        inventory = createInventory(LangUtils.get("modifier.iv.ui.name"), 6);
     }
 
     @Override
@@ -115,30 +116,30 @@ public class IVModifierUI extends DynamicUI {
             setItem(slot, display);
 
             ItemStack decrease = new ItemStack(Blocks.CONCRETE, 1, EnumDyeColor.RED.getMetadata());
-            ItemUtils.setDisplayName(decrease, "&cDecrease IVs");
+            ItemUtils.setDisplayName(decrease, "modifier.iv.decrease.name");
             ItemUtils.setItemLore(decrease,
-                    "&cClick to remove 1 IV for " + ConfigController.INSTANCE.getPriceFor(ModifierType.DECREASE_IV, pokemon),
-                    "&4Shift click to remove 10 IVs for " + ConfigController.INSTANCE.getPriceFor(ModifierType.DECREASE_IV_10, pokemon)
+                    LangUtils.format("modifier.iv.decrease.one", ConfigController.INSTANCE.getPriceFor(ModifierType.DECREASE_IV, pokemon)),
+                    LangUtils.format("modifier.iv.decrease.ten", ConfigController.INSTANCE.getPriceFor(ModifierType.DECREASE_IV_10, pokemon))
             );
             setItem(slot + 1, decrease);
 
             ItemStack increase = new ItemStack(Blocks.CONCRETE, 1, EnumDyeColor.GREEN.getMetadata());
-            ItemUtils.setDisplayName(increase, "&aIncrease IVs");
+            ItemUtils.setDisplayName(increase, "modifier.iv.increase.name");
             ItemUtils.setItemLore(
                     increase,
-                    "&aClick to add 1 IV for " + ConfigController.INSTANCE.getPriceFor(ModifierType.INCREASE_IV, pokemon),
-                    "&2Shift click to add 10 IVs for " + ConfigController.INSTANCE.getPriceFor(ModifierType.INCREASE_IV_10, pokemon)
+                    LangUtils.format("modifier.iv.increase.one", ConfigController.INSTANCE.getPriceFor(ModifierType.INCREASE_IV, pokemon)),
+                    LangUtils.format("modifier.iv.increase.ten", ConfigController.INSTANCE.getPriceFor(ModifierType.INCREASE_IV_10, pokemon))
             );
             setItem(slot + 2, increase);
         }
 
         ItemStack maxIvs = new ItemStack(PixelmonItems.maxPotion);
-        ItemUtils.setDisplayName(maxIvs, "&9Max IVs");
+        ItemUtils.setDisplayName(maxIvs, "modifier.iv.max-ivs.name");
         ItemUtils.setItemLore(maxIvs, IVController.INSTANCE.getPriceLine(pokemon));
         setItem(MAX_IVS, maxIvs);
 
         ItemStack randomIvs = new ItemStack(PixelmonItemsValuables.strangeSouvenir);
-        ItemUtils.setDisplayName(randomIvs, "&eRandom IVs (3 Perfect)");
+        ItemUtils.setDisplayName(randomIvs, "modifier.iv.random-ivs.name");
         ItemUtils.setItemLore(randomIvs, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPriceFor(ModifierType.RANDOM_IV, pokemon)));
         setItem(RANDOM_IVS, randomIvs);
 

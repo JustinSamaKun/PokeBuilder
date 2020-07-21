@@ -13,14 +13,6 @@ import java.util.Set;
 @Setter
 public class Config {
 
-    private String messagePrefix = "&4&lPokeBuilder &7&l> &f";
-    private String notEnoughMoneyMessage = "You do not have enough money to do this!";
-    private String paidMessage = "$%s has been withdrawn from your account";
-    private String costMessage = "&7Cost: &a$%s";
-    private String createPokemonMessage = "Send the name of the Pokemon you want in chat";
-    private String pokemonNotFoundMessage = "Could not create the Pokemon with name %s";
-    private String pokemonIsBlacklistedMessage = "You are not allowed to create this Pokemon";
-
     private String currency = "Coin";
 
     private Set<ModifierType> blacklistedModifiers = Sets.newHashSet();

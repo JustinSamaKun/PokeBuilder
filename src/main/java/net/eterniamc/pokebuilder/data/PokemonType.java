@@ -23,7 +23,6 @@ public enum PokemonType {
         this.filter = filter;
         this.species = Arrays.stream(EnumSpecies.values())
                 .filter(filter)
-                .filter(species1 -> !ConfigController.INSTANCE.isBlacklisted(species1))
                 .collect(Collectors.toList());
     }
 

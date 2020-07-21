@@ -5,9 +5,6 @@ import net.eterniamc.bridge.Bridge;
 import net.eterniamc.pokebuilder.controller.ConfigController;
 import net.eterniamc.pokebuilder.data.ModifierType;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentString;
-
-import java.text.DecimalFormat;
 
 public class CurrencyUtils {
 
@@ -25,13 +22,13 @@ public class CurrencyUtils {
     public static boolean playerHasMoney(EntityPlayerMP player, double amount) {
         boolean pass = Bridge.INSTANCE.API.getCurrencyController().getPlayerBalance(ConfigController.CONFIG.getCurrency(), player) >= amount;
         if (!pass) {
-            ChatUtils.sendMessage(player, ConfigController.CONFIG.getNotEnoughMoneyMessage());
+            ChatUtils.sendMessage(player, "message.not-enough-money");
         }
         return pass;
     }
 
     public static void removePlayerMoney(EntityPlayerMP player, double amount) {
         Bridge.INSTANCE.API.getCurrencyController().removePlayerBalance(ConfigController.CONFIG.getCurrency(), player, amount);
-        ChatUtils.sendMessage(player, String.format(ConfigController.CONFIG.getPaidMessage(), new DecimalFormat("#,###,###,###.##").format(amount)));
+        ChatUtils.sendMessage(player, LangUtils.format("message.paid", LangUtils.formatNumber(amount)));
     }
 }

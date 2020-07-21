@@ -10,6 +10,7 @@ import net.eterniamc.dynamicui.DynamicUI;
 import net.eterniamc.pokebuilder.controller.ConfigController;
 import net.eterniamc.pokebuilder.data.PokemonType;
 import net.eterniamc.pokebuilder.util.ItemUtils;
+import net.eterniamc.pokebuilder.util.LangUtils;
 import net.eterniamc.pokebuilder.util.UserInterfaceUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -29,7 +30,7 @@ public class PokemonSelectForCreationUI extends DynamicUI {
 
     @Override
     public void generateInventory() {
-        inventory = createInventory("Select A Pokemon", 6);
+        inventory = createInventory(LangUtils.get("create.select-ui.name"), 6);
     }
 
     @Override
@@ -106,11 +107,11 @@ public class PokemonSelectForCreationUI extends DynamicUI {
         }
 
         ItemStack stack = new ItemStack(PixelmonItems.tradeHolderRight);
-        ItemUtils.setDisplayName(stack, "&aNext Page");
+        ItemUtils.setDisplayName(stack, "create.select-ui.next");
         setItem(FORWARD_BUTTON, stack);
 
         stack = new ItemStack(Objects.requireNonNull(Item.getByNameOrId("pixelmon:trade_holder_left")));
-        ItemUtils.setDisplayName(stack, "&aPrevious Page");
+        ItemUtils.setDisplayName(stack, "create.select-ui.previous");
         setItem(BACK_BUTTON, stack);
     }
 }

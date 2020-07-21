@@ -23,7 +23,7 @@ public enum ShinyController implements ModifierController {
     @Override
     public ItemStack getDisplay(Pokemon pokemon) {
         ItemStack stack = new ItemStack(Items.NETHER_STAR);
-        ItemUtils.setDisplayName(stack, "&eShiny Modifier");
+        ItemUtils.setDisplayName(stack, "modifier.shiny.name");
         ItemUtils.setItemLore(stack,getPriceLine(pokemon));
         return stack;
     }

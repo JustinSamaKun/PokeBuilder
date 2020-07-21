@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.config.PixelmonItems;
 import com.pixelmonmod.pixelmon.entities.pixelmon.stats.Gender;
 import net.eterniamc.pokebuilder.data.ModifierType;
 import net.eterniamc.pokebuilder.util.ItemUtils;
+import net.eterniamc.pokebuilder.util.LangUtils;
 import net.eterniamc.pokebuilder.util.UserInterfaceUtils;
 import net.minecraft.item.ItemStack;
 
@@ -33,9 +34,9 @@ public enum GenderController implements ModifierController {
     @Override
     public ItemStack getDisplay(Pokemon pokemon) {
         ItemStack stack = new ItemStack(PixelmonItems.awakening);
-        ItemUtils.setDisplayName(stack, (pokemon.getGender() == Gender.Male ? "&b" : "&d") + "Gender Modifier");
+        ItemUtils.setDisplayName(stack, (pokemon.getGender() == Gender.Male ? "&b" : "&d") + LangUtils.get("modifier.gender.name"));
         ItemUtils.setItemLore(stack, !canApply(pokemon) ?
-                "&cThis Pokemon only has one gender" :
+                "modifier.gender.error" :
                 getPriceLine(pokemon)
         );
         return stack;

@@ -14,18 +14,13 @@ public class ItemUtils {
         NBTTagCompound display = stack.getOrCreateSubCompound("display");
         NBTTagList list = new NBTTagList();
         for (String s : lore) {
-            list.appendTag(new NBTTagString(TextUtils.text(s)));
+            list.appendTag(new NBTTagString(LangUtils.get(s)));
         }
         display.setTag("Lore", list);
     }
 
     public static void setItemLore(ItemStack stack, String... lore) {
-        NBTTagCompound display = stack.getOrCreateSubCompound("display");
-        NBTTagList list = new NBTTagList();
-        for (String s : lore) {
-            list.appendTag(new NBTTagString(TextUtils.text(s)));
-        }
-        display.setTag("Lore", list);
+        setItemLore(stack, Lists.newArrayList(lore));
     }
 
     public static List<String> splitToLore(String text) {
@@ -34,6 +29,6 @@ public class ItemUtils {
 
     public static void setDisplayName(ItemStack stack, String name) {
         NBTTagCompound display = stack.getOrCreateSubCompound("display");
-        display.setTag("Name", new NBTTagString(TextUtils.text("&r" + name)));
+        display.setTag("Name", new NBTTagString(TextUtils.text("&r" + LangUtils.get(name))));
     }
 }

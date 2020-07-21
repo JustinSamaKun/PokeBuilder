@@ -23,7 +23,7 @@ public enum GrowthController implements ModifierController {
     @Override
     public ItemStack getDisplay(Pokemon pokemon) {
         ItemStack stack = new ItemStack(PixelmonItems.ppUp);
-        ItemUtils.setDisplayName(stack, "&aGrowth Modifier");
+        ItemUtils.setDisplayName(stack, "modifier.growth.name");
         ItemUtils.setItemLore(stack, getPriceLine(pokemon));
         return stack;
     }

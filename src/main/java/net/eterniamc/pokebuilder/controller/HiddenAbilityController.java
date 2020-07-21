@@ -28,9 +28,9 @@ public enum HiddenAbilityController implements ModifierController {
     @Override
     public ItemStack getDisplay(Pokemon pokemon) {
         ItemStack stack = new ItemStack(PixelmonItems.abilityCapsule);
-        ItemUtils.setDisplayName(stack, "&5Hidden Ability Modifier");
+        ItemUtils.setDisplayName(stack, "modifier.hidden-ability.name");
         ItemUtils.setItemLore(stack, !canApply(pokemon) ?
-                "&cThis Pokemon already has its hidden ability" :
+                "modifier.hidden-ability.error" :
                 getPriceLine(pokemon)
         );
         return stack;
