@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.Properties;
@@ -71,10 +72,7 @@ public enum ConfigController {
         Properties defaultProperties = new Properties();
         defaultProperties.load(new FileReader(getLanguageFile()));
         if (!LANG_FILE.exists()) {
-            FileWriter writer = new FileWriter(LANG_FILE);
-            defaultProperties.store(writer, "Localization for the PokeBuilder plugin");
-            writer.flush();
-            writer.close();
+            Files.copy(ConfigController.class.getResourceAsStream("language.properties"), LANG_FILE.toPath());
         }
         languageProperties = new Properties(defaultProperties);
         languageProperties.load(new FileReader(LANG_FILE));
