@@ -25,19 +25,13 @@ public class CurrencyUtils {
     public static boolean playerHasMoney(EntityPlayerMP player, double amount) {
         boolean pass = Bridge.INSTANCE.API.getCurrencyController().getPlayerBalance(ConfigController.CONFIG.getCurrency(), player) >= amount;
         if (!pass) {
-            player.sendMessage(new TextComponentString(TextUtils.text(
-                    ConfigController.CONFIG.getMessagePrefix() +
-                        ConfigController.CONFIG.getNotEnoughMoneyMessage()
-            )));
+            ChatUtils.sendMessage(player, ConfigController.CONFIG.getNotEnoughMoneyMessage());
         }
         return pass;
     }
 
     public static void removePlayerMoney(EntityPlayerMP player, double amount) {
         Bridge.INSTANCE.API.getCurrencyController().removePlayerBalance(ConfigController.CONFIG.getCurrency(), player, amount);
-        player.sendMessage(new TextComponentString(TextUtils.text(
-                ConfigController.CONFIG.getMessagePrefix() +
-                    String.format(ConfigController.CONFIG.getPaidMessage(), new DecimalFormat("#,###,###,###.##").format(amount))
-        )));
+        ChatUtils.sendMessage(player, String.format(ConfigController.CONFIG.getPaidMessage(), new DecimalFormat("#,###,###,###.##").format(amount)));
     }
 }

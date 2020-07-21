@@ -21,8 +21,9 @@ public enum ModifierType {
     private final double defaultPrice;
 
     public static ModifierType getFromName(String name) {
+        name = name.toLowerCase().replaceAll("[_ ]", "");
         for (ModifierType type : values()) {
-            if (type.name().replace("_", "").toLowerCase().startsWith(name.replace("_", "").replace(" ", "").toLowerCase())) {
+            if (type.toString().replaceAll("[_ ]", "").equals(name)) {
                 return type;
             }
         }

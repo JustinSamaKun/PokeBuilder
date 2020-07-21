@@ -7,6 +7,7 @@ import net.eterniamc.dynamicui.DynamicUI;
 import net.eterniamc.pokebuilder.PokeBuilder;
 import net.eterniamc.pokebuilder.controller.ConfigController;
 import net.eterniamc.pokebuilder.data.PokemonType;
+import net.eterniamc.pokebuilder.util.ChatUtils;
 import net.eterniamc.pokebuilder.util.CurrencyUtils;
 import net.eterniamc.pokebuilder.util.ItemUtils;
 import net.eterniamc.pokebuilder.util.TextUtils;
@@ -31,22 +32,13 @@ public class PokemonCreationUI extends DynamicUI {
 
         addListener(NORMAL_SLOT, (player1, event) -> {
             close();
-            player1.sendMessage(new TextComponentString(TextUtils.text(
-                    ConfigController.CONFIG.getMessagePrefix() +
-                    ConfigController.CONFIG.getCreatePokemonMessage()
-            )));
+            ChatUtils.sendMessage(player1, ConfigController.CONFIG.getCreatePokemonMessage());
             PokeBuilder.INSTANCE.registerChatAction(player1, message -> {
                 EnumSpecies species = EnumSpecies.getFromNameAnyCase(message.trim());
                 if (species == null) {
-                    player1.sendMessage(new TextComponentString(TextUtils.text(
-                            ConfigController.CONFIG.getMessagePrefix() +
-                            String.format(ConfigController.CONFIG.getPokemonNotFoundMessage(), message)
-                    )));
+                    ChatUtils.sendMessage(player1, String.format(ConfigController.CONFIG.getPokemonNotFoundMessage(), message));
                 } else if (ConfigController.INSTANCE.isBlacklisted(species)) {
-                    player1.sendMessage(new TextComponentString(TextUtils.text(
-                            ConfigController.CONFIG.getMessagePrefix() +
-                            String.format(ConfigController.CONFIG.getPokemonIsBlacklistedMessage(), message)
-                    )));
+                    ChatUtils.sendMessage(player1, String.format(ConfigController.CONFIG.getPokemonIsBlacklistedMessage(), message));
                 } else {
                     CurrencyUtils.wrapAction(player1, ConfigController.INSTANCE.getPokemonCreationPrice(species), () -> {
                         PlayerPartyStorage party = Pixelmon.storageManager.getParty(player1);
