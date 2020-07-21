@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
+import java.util.Map;
 
 public enum ConfigController {
     INSTANCE;
@@ -37,9 +38,10 @@ public enum ConfigController {
             CONFIG = new Config();
             for (ModifierType type : ModifierType.values()) {
                 CONFIG.getModifierPrices().put(type, type.getDefaultPrice());
-                CONFIG.getModifierPriceOverrides().put(type, Maps.newEnumMap(EnumSpecies.class));
+                CONFIG.getModifierPriceOverrides().put(type, Maps.newHashMap());
             }
-            CONFIG.getModifierPriceOverrides().get(ModifierType.MAX_IV).put(EnumSpecies.Ditto, 100000.0);
+            CONFIG.getModifierPriceOverrides().get(ModifierType.MAX_IV).put(EnumSpecies.Ditto.toString(), 10000.0);
+            CONFIG.getModifierPriceOverrides().get(ModifierType.SHINY).put(PokemonType.LEGENDARY.toString(), 500000.0);
             for (PokemonType pokemonType : PokemonType.values()) {
                 CONFIG.getPokemonCreationPrices().put(pokemonType, pokemonType.getDefaultPrice());
             }
@@ -60,8 +62,11 @@ public enum ConfigController {
     }
 
     public double getPriceFor(ModifierType type, Pokemon pokemon) {
-        if (CONFIG.getModifierPriceOverrides().getOrDefault(type, Maps.newHashMap()).containsKey(pokemon.getSpecies())) {
-            return CONFIG.getModifierPriceOverrides().get(type).get(pokemon.getSpecies());
+        Map<String, Double> overrides = CONFIG.getModifierPriceOverrides().getOrDefault(type, Maps.newHashMap());
+        if (overrides.containsKey(pokemon.getSpecies().toString())) {
+            return CONFIG.getModifierPriceOverrides().get(type).get(pokemon.getSpecies().toString());
+        } else if (overrides.containsKey(PokemonType.of(pokemon.getSpecies()).toString())) {
+            return CONFIG.getModifierPriceOverrides().get(type).get(PokemonType.of(pokemon.getSpecies()).toString());
         }
 
         double multiplier = pokemon.isLegendary() ? CONFIG.getLegendaryPriceMultiplier() : 1;

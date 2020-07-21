@@ -28,7 +28,7 @@ public class Config {
 
     private double legendaryPriceMultiplier = 1.5;
     private Map<ModifierType, Double> modifierPrices = Maps.newEnumMap(ModifierType.class);
-    private Map<ModifierType, Map<EnumSpecies, Double>> modifierPriceOverrides = Maps.newEnumMap(ModifierType.class);
+    private Map<ModifierType, Map<String, Double>> modifierPriceOverrides = Maps.newEnumMap(ModifierType.class);
 
     private boolean pokemonCreationAllowed = true;
     private Map<PokemonType, Double> pokemonCreationPrices = Maps.newHashMap();
