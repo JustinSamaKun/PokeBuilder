@@ -41,7 +41,7 @@ public class IVModifierUI extends DynamicUI {
 
     @Override
     public void generateInventory() {
-        inventory = createInventory("Modify Your IVs", 6);
+        inventory = createInventory("Modify IVs", 6);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class IVModifierUI extends DynamicUI {
 
         ItemStack randomIvs = new ItemStack(PixelmonItemsValuables.strangeSouvenir);
         ItemUtils.setDisplayName(randomIvs, "&eRandom IVs (3 Perfect)");
-        ItemUtils.setItemLore(randomIvs, "&7Cost: &a" + ConfigController.INSTANCE.getPriceFor(ModifierType.RANDOM_IV, pokemon));
+        ItemUtils.setItemLore(randomIvs, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPriceFor(ModifierType.RANDOM_IV, pokemon)));
         setItem(RANDOM_IVS, randomIvs);
 
         super.render();
