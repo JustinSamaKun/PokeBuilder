@@ -2,6 +2,7 @@ package net.eterniamc.pokebuilder.ui;
 
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.config.PixelmonItemsPokeballs;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
 import net.eterniamc.dynamicui.DynamicUI;
 import net.eterniamc.pokebuilder.controller.ConfigController;
@@ -35,8 +36,12 @@ public class PokemonSelectUI extends DynamicUI {
             int slot = LAYOUT[i];
             Pokemon pokemon = party.get(i);
 
-            if (pokemon != null && !ConfigController.INSTANCE.isBlacklisted(pokemon.getSpecies())) {
-                addListener(slot, (player, action) -> new ModifierSelectUI(pokemon).open(player));
+            if (pokemon != null) {
+                if (!ConfigController.INSTANCE.isBlacklisted(pokemon.getSpecies())) {
+                    addListener(slot, (player, action) -> new ModifierSelectUI(pokemon).open(player));
+                }
+            } else if (ConfigController.CONFIG.isPokemonCreationAllowed()) {
+                addListener(slot, (player, action) -> new PokemonCreationUI().open(player));
             }
         }
     }
@@ -58,13 +63,18 @@ public class PokemonSelectUI extends DynamicUI {
 
             if (pokemon != null) {
                 new PokemonComponent(slot, pokemon).render(inventory);
+                ItemStack stack = inventory.getStackInSlot(slot);
                 if (ConfigController.INSTANCE.isBlacklisted(pokemon.getSpecies())) {
-                    ItemUtils.setDisplayName(inventory.getStackInSlot(slot), "&c" + pokemon.getDisplayName() + " can not be modified");
+                    ItemUtils.setDisplayName(stack, "&c" + pokemon.getDisplayName() + " can not be modified");
                 } else {
-                    ItemUtils.setDisplayName(inventory.getStackInSlot(slot), "&eClick To Edit");
+                    ItemUtils.setDisplayName(stack, "&eClick To Edit");
                 }
+            } else if (ConfigController.CONFIG.isPokemonCreationAllowed()) {
+                ItemStack stack = new ItemStack(PixelmonItemsPokeballs.pokeBall);
+                ItemUtils.setDisplayName(stack, "&eCreate A Pokemon");
+                setItem(slot, stack);
             } else {
-                inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
+                setItem(slot, ItemStack.EMPTY);
             }
         }
     }

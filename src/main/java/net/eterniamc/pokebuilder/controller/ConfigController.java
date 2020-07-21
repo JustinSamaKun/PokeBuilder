@@ -8,6 +8,7 @@ import com.pixelmonmod.pixelmon.enums.EnumSpecies;
 import lombok.SneakyThrows;
 import net.eterniamc.pokebuilder.data.Config;
 import net.eterniamc.pokebuilder.data.ModifierType;
+import net.eterniamc.pokebuilder.data.PokemonType;
 import net.eterniamc.pokebuilder.data.gson.EnumSpeciesAdapter;
 import net.eterniamc.pokebuilder.data.gson.ModifierTypeAdapter;
 
@@ -34,10 +35,13 @@ public enum ConfigController {
         } else {
             CONFIG = new Config();
             for (ModifierType type : ModifierType.values()) {
-                CONFIG.getPrices().put(type, type.getDefaultPrice());
-                CONFIG.getOverridePrices().put(type, Maps.newEnumMap(EnumSpecies.class));
+                CONFIG.getModifierPrices().put(type, type.getDefaultPrice());
+                CONFIG.getModifierPriceOverrides().put(type, Maps.newEnumMap(EnumSpecies.class));
             }
-            CONFIG.getOverridePrices().get(ModifierType.MAX_IV).put(EnumSpecies.Ditto, 100000.0);
+            CONFIG.getModifierPriceOverrides().get(ModifierType.MAX_IV).put(EnumSpecies.Ditto, 100000.0);
+            for (PokemonType pokemonType : PokemonType.values()) {
+                CONFIG.getPokemonCreationPrices().put(pokemonType, pokemonType.getDefaultPrice());
+            }
         }
         writeToFile();
     }
@@ -51,13 +55,11 @@ public enum ConfigController {
     }
 
     public double getPriceFor(ModifierType type, Pokemon pokemon) {
-        if (CONFIG.getOverridePrices()
-                .getOrDefault(type, Maps.newHashMap())
-                .containsKey(pokemon.getSpecies())) {
-            return CONFIG.getOverridePrices().get(type).get(pokemon.getSpecies());
+        if (CONFIG.getModifierPriceOverrides().getOrDefault(type, Maps.newHashMap()).containsKey(pokemon.getSpecies())) {
+            return CONFIG.getModifierPriceOverrides().get(type).get(pokemon.getSpecies());
         }
 
-        return CONFIG.getPrices().getOrDefault(type, type.getDefaultPrice());
+        return CONFIG.getModifierPrices().getOrDefault(type, type.getDefaultPrice());
     }
 
     public boolean isBlacklisted(ModifierType type) {
@@ -66,5 +68,9 @@ public enum ConfigController {
 
     public boolean isBlacklisted(EnumSpecies type) {
         return CONFIG.getBlacklistedPokemon().contains(type);
+    }
+
+    public double getPriceToCreate(EnumSpecies species) {
+        return CONFIG.getPokemonCreationPriceOverrides().getOrDefault(species, CONFIG.getPokemonCreationPrices().get(PokemonType.of(species)));
     }
 }
