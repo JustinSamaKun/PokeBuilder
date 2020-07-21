@@ -24,5 +24,7 @@ public class Config {
 
     private Set<ModifierType> blacklistedModifiers = Sets.newHashSet();
 
+    private Set<EnumSpecies> blacklistedPokemon = Sets.newHashSet();
+
     private Map<ModifierType, Map<EnumSpecies, Double>> overridePrices = Maps.newEnumMap(ModifierType.class);
 }

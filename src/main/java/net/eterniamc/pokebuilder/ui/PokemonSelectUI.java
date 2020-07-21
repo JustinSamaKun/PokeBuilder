@@ -4,6 +4,7 @@ import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.storage.PlayerPartyStorage;
 import net.eterniamc.dynamicui.DynamicUI;
+import net.eterniamc.pokebuilder.controller.ConfigController;
 import net.eterniamc.pokebuilder.ui.component.PokemonComponent;
 import net.eterniamc.pokebuilder.util.ItemUtils;
 import net.eterniamc.pokebuilder.util.TextUtils;
@@ -34,7 +35,7 @@ public class PokemonSelectUI extends DynamicUI {
             int slot = LAYOUT[i];
             Pokemon pokemon = party.get(i);
 
-            if (pokemon != null) {
+            if (pokemon != null && !ConfigController.INSTANCE.isBlacklisted(pokemon.getSpecies())) {
                 addListener(slot, (player, action) -> new ModifierSelectUI(pokemon).open(player));
             }
         }
@@ -57,7 +58,11 @@ public class PokemonSelectUI extends DynamicUI {
 
             if (pokemon != null) {
                 new PokemonComponent(slot, pokemon).render(inventory);
-                inventory.getStackInSlot(slot).setStackDisplayName(TextUtils.text("&eClick To Edit"));
+                if (ConfigController.INSTANCE.isBlacklisted(pokemon.getSpecies())) {
+                    ItemUtils.setDisplayName(inventory.getStackInSlot(slot), "&c" + pokemon.getDisplayName() + " can not be modified");
+                } else {
+                    ItemUtils.setDisplayName(inventory.getStackInSlot(slot), "&eClick To Edit");
+                }
             } else {
                 inventory.setInventorySlotContents(slot, ItemStack.EMPTY);
             }

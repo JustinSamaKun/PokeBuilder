@@ -63,4 +63,8 @@ public enum ConfigController {
     public boolean isBlacklisted(ModifierType type) {
         return CONFIG.getBlacklistedModifiers().contains(type);
     }
+
+    public boolean isBlacklisted(EnumSpecies type) {
+        return CONFIG.getBlacklistedPokemon().contains(type);
+    }
 }
