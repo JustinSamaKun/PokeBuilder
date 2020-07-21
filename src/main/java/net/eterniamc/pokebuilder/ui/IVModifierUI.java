@@ -9,13 +9,9 @@ import com.pixelmonmod.pixelmon.entities.pixelmon.stats.StatsType;
 import lombok.RequiredArgsConstructor;
 import net.eterniamc.dynamicui.DynamicUI;
 import net.eterniamc.pokebuilder.controller.ConfigController;
-import net.eterniamc.pokebuilder.controller.IVController;
 import net.eterniamc.pokebuilder.data.ModifierType;
 import net.eterniamc.pokebuilder.ui.component.PokeballComponent;
-import net.eterniamc.pokebuilder.util.CurrencyUtils;
-import net.eterniamc.pokebuilder.util.ItemUtils;
-import net.eterniamc.pokebuilder.util.LangUtils;
-import net.eterniamc.pokebuilder.util.UserInterfaceUtils;
+import net.eterniamc.pokebuilder.util.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.EnumDyeColor;
@@ -56,45 +52,59 @@ public class IVModifierUI extends DynamicUI {
             int k = i;
 
             addListener(slot, (player, action) -> {
-                int target = Math.max(0, value - (action.getClickType() == ClickType.QUICK_MOVE ? 10 : 1));
-                CurrencyUtils.wrapAction(
-                        player,
-                        action.getClickType() == ClickType.QUICK_MOVE ? ModifierType.DECREASE_IV_10 : ModifierType.DECREASE_IV,
-                        pokemon,
-                        () -> {
-                            ivs[k] = target;
-                            pokemon.getIVs().fillFromArray(ivs);
-                        }
-                );
-                render();
+                ModifierType type = action.getClickType() == ClickType.QUICK_MOVE ? ModifierType.DECREASE_IV_10 : ModifierType.DECREASE_IV;
+                if (ConfigController.INSTANCE.isBlacklisted(type)) {
+                    ChatUtils.sendMessage(player, "message.modifier-is-blacklisted");
+                } else {
+                    int target = Math.max(0, value - (action.getClickType() == ClickType.QUICK_MOVE ? 10 : 1));
+                    CurrencyUtils.wrapAction(
+                            player,
+                            type,
+                            pokemon,
+                            () -> {
+                                ivs[k] = target;
+                                pokemon.getIVs().fillFromArray(ivs);
+                            }
+                    );
+                    render();
+                }
             });
             slot = LAYOUT[i] + 2;
 
             addListener(slot, (player, action) -> {
-                int target = Math.min(31, value + (action.getClickType() == ClickType.QUICK_MOVE ? 10 : 1));
-                CurrencyUtils.wrapAction(
-                        player,
-                        action.getClickType() == ClickType.QUICK_MOVE ? ModifierType.INCREASE_IV_10 : ModifierType.INCREASE_IV,
-                        pokemon,
-                        () -> {
-                            ivs[k] = target;
-                            pokemon.getIVs().fillFromArray(ivs);
-                        }
-                );
-                render();
+                ModifierType type = action.getClickType() == ClickType.QUICK_MOVE ? ModifierType.INCREASE_IV_10 : ModifierType.INCREASE_IV;
+                if (ConfigController.INSTANCE.isBlacklisted(type)) {
+                    ChatUtils.sendMessage(player, "message.modifier-is-blacklisted");
+                } else {
+                    int target = Math.min(31, value + (action.getClickType() == ClickType.QUICK_MOVE ? 10 : 1));
+                    CurrencyUtils.wrapAction(
+                            player,
+                            type,
+                            pokemon,
+                            () -> {
+                                ivs[k] = target;
+                                pokemon.getIVs().fillFromArray(ivs);
+                            }
+                    );
+                    render();
+                }
             });
         }
 
-        addListener(MAX_IVS, (player, action) ->
-            UserInterfaceUtils.createConfirmation(pokemon, ModifierType.MAX_IV, pokemon.getIVs()::maximizeIVs)
-        );
+        if (!ConfigController.INSTANCE.isBlacklisted(ModifierType.MAX_IV)) {
+            addListener(MAX_IVS, (player, action) ->
+                UserInterfaceUtils.createConfirmation(pokemon, ModifierType.MAX_IV, pokemon.getIVs()::maximizeIVs)
+            );
+        }
 
-        addListener(RANDOM_IVS, (player, action) ->
-            UserInterfaceUtils.createConfirmation(pokemon, ModifierType.MAX_IV, () -> {
-                pokemon.getIVs().CopyIVs(IVStore.CreateNewIVs3Perfect());
-                pokemon.markDirty(EnumUpdateType.IVs);
-            })
-        );
+        if (!ConfigController.INSTANCE.isBlacklisted(ModifierType.RANDOM_IV)) {
+            addListener(RANDOM_IVS, (player, action) ->
+                UserInterfaceUtils.createConfirmation(pokemon, ModifierType.RANDOM_IV, () -> {
+                    pokemon.getIVs().CopyIVs(IVStore.CreateNewIVs3Perfect());
+                    pokemon.markDirty(EnumUpdateType.IVs);
+                })
+            );
+        }
     }
 
     @Override
@@ -135,12 +145,20 @@ public class IVModifierUI extends DynamicUI {
 
         ItemStack maxIvs = new ItemStack(PixelmonItems.maxPotion);
         ItemUtils.setDisplayName(maxIvs, "modifier.iv.max-ivs.name");
-        ItemUtils.setItemLore(maxIvs, IVController.INSTANCE.getPriceLine(pokemon));
+        if (ConfigController.INSTANCE.isBlacklisted(ModifierType.MAX_IV)) {
+            ItemUtils.setItemLore(maxIvs, "modifier.blacklisted");
+        } else {
+            ItemUtils.setItemLore(maxIvs, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPriceFor(ModifierType.MAX_IV, pokemon)));
+        }
         setItem(MAX_IVS, maxIvs);
 
         ItemStack randomIvs = new ItemStack(PixelmonItemsValuables.strangeSouvenir);
         ItemUtils.setDisplayName(randomIvs, "modifier.iv.random-ivs.name");
-        ItemUtils.setItemLore(randomIvs, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPriceFor(ModifierType.RANDOM_IV, pokemon)));
+        if (ConfigController.INSTANCE.isBlacklisted(ModifierType.RANDOM_IV)) {
+            ItemUtils.setItemLore(maxIvs, "modifier.blacklisted");
+        } else {
+            ItemUtils.setItemLore(randomIvs, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPriceFor(ModifierType.RANDOM_IV, pokemon)));
+        }
         setItem(RANDOM_IVS, randomIvs);
 
         super.render();
