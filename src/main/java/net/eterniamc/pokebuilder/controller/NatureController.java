@@ -24,6 +24,7 @@ public enum NatureController implements ModifierController {
     public ItemStack getDisplay(Pokemon pokemon) {
         ItemStack stack = new ItemStack(PixelmonItemsHeld.airBalloon);
         ItemUtils.setDisplayName(stack, "modifier.nature.name");
+        ItemUtils.setItemLore(stack, getPriceLine(pokemon));
         return stack;
     }
 }
