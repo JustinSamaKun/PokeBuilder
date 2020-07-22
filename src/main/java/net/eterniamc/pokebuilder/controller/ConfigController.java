@@ -18,10 +18,10 @@ import net.eterniamc.pokebuilder.util.LangUtils;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.file.Files;
-import java.text.DecimalFormat;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 public enum ConfigController {
@@ -70,9 +70,9 @@ public enum ConfigController {
         writeToFile();
 
         Properties defaultProperties = new Properties();
-        defaultProperties.load(new FileReader(getLanguageFile()));
+        defaultProperties.load(getLanguageInputStream());
         if (!LANG_FILE.exists()) {
-            Files.copy(ConfigController.class.getResourceAsStream("language.properties"), LANG_FILE.toPath());
+            Files.copy(getLanguageInputStream(), LANG_FILE.toPath());
         }
         languageProperties = new Properties(defaultProperties);
         languageProperties.load(new FileReader(LANG_FILE));
@@ -86,17 +86,8 @@ public enum ConfigController {
         writer.close();
     }
 
-    private File getLanguageFile() {
-
-        ClassLoader classLoader = getClass().getClassLoader();
-
-        URL resource = classLoader.getResource("language.properties");
-        if (resource == null) {
-            throw new IllegalArgumentException("file is not found!");
-        } else {
-            return new File(resource.getFile());
-        }
-
+    private InputStream getLanguageInputStream() {
+        return Objects.requireNonNull(ConfigController.class.getClassLoader().getResourceAsStream("language.properties"));
     }
 
     public String createPriceLine(double price) {
