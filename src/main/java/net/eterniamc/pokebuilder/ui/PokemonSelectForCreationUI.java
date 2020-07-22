@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class PokemonSelectForCreationUI extends DynamicUI {
@@ -38,6 +39,9 @@ public class PokemonSelectForCreationUI extends DynamicUI {
         super.loadListeners();
 
         Iterator<EnumSpecies> iterator = type.getSpecies()
+                .stream()
+                .filter(type -> !ConfigController.INSTANCE.isBlacklisted(type))
+                .collect(Collectors.toList())
                 .subList(currentPage * 28, Math.min(currentPage * 28 + 28, type.getSpecies().size()))
                 .iterator();
 
@@ -79,6 +83,9 @@ public class PokemonSelectForCreationUI extends DynamicUI {
         super.render();
 
         Iterator<EnumSpecies> iterator = type.getSpecies()
+                .stream()
+                .filter(type -> !ConfigController.INSTANCE.isBlacklisted(type))
+                .collect(Collectors.toList())
                 .subList(currentPage * 28, Math.min(currentPage * 28 + 28, type.getSpecies().size()))
                 .iterator();
 
