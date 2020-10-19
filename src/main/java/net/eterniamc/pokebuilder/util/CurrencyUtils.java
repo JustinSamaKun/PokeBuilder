@@ -19,8 +19,12 @@ public class CurrencyUtils {
         }
     }
 
+    public static boolean checkPlayerMoney(EntityPlayerMP player, double amount) {
+        return Bridge.INSTANCE.API.getCurrencyController().getPlayerBalance(ConfigController.CONFIG.getCurrency(), player) >= amount;
+    }
+
     public static boolean playerHasMoney(EntityPlayerMP player, double amount) {
-        boolean pass = Bridge.INSTANCE.API.getCurrencyController().getPlayerBalance(ConfigController.CONFIG.getCurrency(), player) >= amount;
+        boolean pass = checkPlayerMoney(player, amount);
         if (!pass) {
             ChatUtils.sendMessage(player, "message.not-enough-money");
         }

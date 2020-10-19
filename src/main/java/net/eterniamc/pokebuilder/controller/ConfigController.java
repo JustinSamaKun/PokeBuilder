@@ -114,7 +114,7 @@ public enum ConfigController {
     }
 
     public String createPriceLine(EntityPlayerMP player, double price) {
-        return LangUtils.format(CurrencyUtils.playerHasMoney(player, price) ? "message.cost" : "message.cost.not-enough-money", LangUtils.formatNumber(price));
+        return LangUtils.format(CurrencyUtils.checkPlayerMoney(player, price) ? "message.cost" : "message.cost.not-enough-money", LangUtils.formatNumber(price));
     }
 
     public double getPriceFor(ModifierType type, Pokemon pokemon) {
