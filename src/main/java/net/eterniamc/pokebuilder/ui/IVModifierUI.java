@@ -148,7 +148,7 @@ public class IVModifierUI extends DynamicUI {
         if (ConfigController.INSTANCE.isBlacklisted(ModifierType.MAX_IV)) {
             ItemUtils.setItemLore(maxIvs, "modifier.blacklisted");
         } else {
-            ItemUtils.setItemLore(maxIvs, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPriceFor(ModifierType.MAX_IV, pokemon)));
+            ItemUtils.setItemLore(maxIvs, ConfigController.INSTANCE.createPriceLine(player,ConfigController.INSTANCE.getPriceFor(ModifierType.MAX_IV, pokemon)));
         }
         setItem(MAX_IVS, maxIvs);
 
@@ -157,7 +157,7 @@ public class IVModifierUI extends DynamicUI {
         if (ConfigController.INSTANCE.isBlacklisted(ModifierType.RANDOM_IV)) {
             ItemUtils.setItemLore(maxIvs, "modifier.blacklisted");
         } else {
-            ItemUtils.setItemLore(randomIvs, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPriceFor(ModifierType.RANDOM_IV, pokemon)));
+            ItemUtils.setItemLore(randomIvs, ConfigController.INSTANCE.createPriceLine(player,ConfigController.INSTANCE.getPriceFor(ModifierType.RANDOM_IV, pokemon)));
         }
         setItem(RANDOM_IVS, randomIvs);
 

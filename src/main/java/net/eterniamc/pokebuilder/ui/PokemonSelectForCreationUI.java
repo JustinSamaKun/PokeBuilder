@@ -100,7 +100,7 @@ public class PokemonSelectForCreationUI extends DynamicUI {
                         nbt.setShort("ndex", (short) species.getNationalPokedexInteger());
                         stack.setTagCompound(nbt);
                         ItemUtils.setDisplayName(stack, "&e" + species.getPokemonName());
-                        ItemUtils.setItemLore(stack, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPokemonCreationPrice(species)));
+                        ItemUtils.setItemLore(stack, ConfigController.INSTANCE.createPriceLine(player,ConfigController.INSTANCE.getPokemonCreationPrice(species)));
                         setItem(slot, stack);
                     } else {
                         setItem(slot, ItemStack.EMPTY);

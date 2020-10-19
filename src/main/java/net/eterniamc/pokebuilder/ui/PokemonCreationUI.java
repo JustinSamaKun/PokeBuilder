@@ -68,12 +68,12 @@ public class PokemonCreationUI extends DynamicUI {
 
         ItemStack stack = new ItemStack(Blocks.CONCRETE, 1, EnumDyeColor.YELLOW.getMetadata());
         ItemUtils.setDisplayName(stack, "create.normal.name");
-        ItemUtils.setItemLore(stack, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPokemonCreationPrice(PokemonType.NORMAL)));
+        ItemUtils.setItemLore(stack, ConfigController.INSTANCE.createPriceLine(player,ConfigController.INSTANCE.getPokemonCreationPrice(PokemonType.NORMAL)));
         setItem(NORMAL_SLOT, stack);
 
         stack = new ItemStack(Blocks.CONCRETE, 1, EnumDyeColor.PURPLE.getMetadata());
         ItemUtils.setDisplayName(stack, "create.legendary.name");
-        ItemUtils.setItemLore(stack, ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPokemonCreationPrice(PokemonType.LEGENDARY)));
+        ItemUtils.setItemLore(stack, ConfigController.INSTANCE.createPriceLine(player,ConfigController.INSTANCE.getPokemonCreationPrice(PokemonType.LEGENDARY)));
         setItem(LEGENDARY_SLOT, stack);
     }
 }

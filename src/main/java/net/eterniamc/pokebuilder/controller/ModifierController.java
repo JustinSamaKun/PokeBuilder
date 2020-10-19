@@ -17,6 +17,6 @@ public interface ModifierController {
     ItemStack getDisplay(Pokemon pokemon);
 
     default String getPriceLine(Pokemon pokemon) {
-        return ConfigController.INSTANCE.createPriceLine(ConfigController.INSTANCE.getPriceFor(getType(), pokemon));
+        return ConfigController.INSTANCE.createPriceLine(pokemon.getOwnerPlayer(),ConfigController.INSTANCE.getPriceFor(getType(), pokemon));
     }
 }

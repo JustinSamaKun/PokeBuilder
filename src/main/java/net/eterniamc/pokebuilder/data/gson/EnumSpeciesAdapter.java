@@ -8,11 +8,11 @@ import java.lang.reflect.Type;
 public class EnumSpeciesAdapter implements JsonSerializer<EnumSpecies>, JsonDeserializer<EnumSpecies> {
     @Override
     public EnumSpecies deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return EnumSpecies.getFromNameAnyCase(json.getAsString());
+        return EnumSpecies.getFromName(json.getAsString()).orElse(null);
     }
 
     @Override
     public JsonElement serialize(EnumSpecies src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.getPokemonName());
+        return new JsonPrimitive(src.name);
     }
 }

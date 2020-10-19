@@ -1,5 +1,6 @@
 package net.eterniamc.pokebuilder.controller;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,16 +14,17 @@ import net.eterniamc.pokebuilder.data.PokemonType;
 import net.eterniamc.pokebuilder.data.gson.EnumSpeciesAdapter;
 import net.eterniamc.pokebuilder.data.gson.ModifierTypeAdapter;
 import net.eterniamc.pokebuilder.data.gson.PokemonTypeAdapter;
+import net.eterniamc.pokebuilder.util.CurrencyUtils;
 import net.eterniamc.pokebuilder.util.LangUtils;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public enum ConfigController {
     INSTANCE;
@@ -46,8 +48,8 @@ public enum ConfigController {
     @SneakyThrows
     public void initialize() {
         File directory = CONFIG_FILE.getParentFile();
-        if (!(directory.exists() || directory.mkdir())) {
-            throw new Error("Could not create config directory PokeBuilder");
+        if (!directory.exists() && !directory.mkdir()) {
+            throw new Error("Could not create PokeBuilder config directory");
         }
 
         if (CONFIG_FILE.exists()) {
@@ -67,15 +69,16 @@ public enum ConfigController {
                 CONFIG.getPokemonCreationPrices().put(pokemonType, pokemonType.getDefaultPrice());
             }
         }
-        writeToFile();
 
         Properties defaultProperties = new Properties();
         defaultProperties.load(getLanguageInputStream());
-        if (!LANG_FILE.exists()) {
-            Files.copy(getLanguageInputStream(), LANG_FILE.toPath());
-        }
         languageProperties = new Properties(defaultProperties);
-        languageProperties.load(new FileReader(LANG_FILE));
+
+        if (LANG_FILE.exists()) {
+            languageProperties.load(new FileReader(LANG_FILE));
+        }
+
+        writeToFile();
     }
 
     @SneakyThrows
@@ -84,14 +87,34 @@ public enum ConfigController {
         writer.write(GSON.toJson(CONFIG));
         writer.flush();
         writer.close();
+
+        StringBuilder langWriter = new StringBuilder();
+        langWriter.append("# Localization for the PokeBuilder plugin\n");
+        langWriter.append("# Only edit the text on the right of the = sign\n");
+        String lastCategory = null;
+        List<String> keys = Lists.newArrayList(languageProperties.stringPropertyNames());
+        Collections.sort(keys);
+        for (String key : keys) {
+            String value = languageProperties.getProperty(key);
+            String category = key.split("[.]")[0];
+            if (!Objects.equals(lastCategory, category)) {
+                langWriter.append('\n');
+                lastCategory= category;
+            }
+            langWriter.append(key).append('=').append(value).append('\n');
+        }
+        writer = new FileWriter(LANG_FILE);
+        writer.write(langWriter.toString());
+        writer.flush();
+        writer.close();
     }
 
     private InputStream getLanguageInputStream() {
         return Objects.requireNonNull(ConfigController.class.getClassLoader().getResourceAsStream("language.properties"));
     }
 
-    public String createPriceLine(double price) {
-        return LangUtils.format("message.cost", LangUtils.formatNumber(price));
+    public String createPriceLine(EntityPlayerMP player, double price) {
+        return LangUtils.format(CurrencyUtils.playerHasMoney(player, price) ? "message.cost" : "message.cost.not-enough-money", LangUtils.formatNumber(price));
     }
 
     public double getPriceFor(ModifierType type, Pokemon pokemon) {
