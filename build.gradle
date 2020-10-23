@@ -78,7 +78,7 @@ repositories {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2854'
 
-    shade 'com.github.JustinSamaKun:Bridge:537d9683a7'
+    shade 'com.github.JustinSamaKun:Bridge:v1.1.0'
     shade 'com.github.JustinSamaKun:DynamicUI:v1.0.0'
 
     shade 'org.projectlombok:lombok:1.18.12'
